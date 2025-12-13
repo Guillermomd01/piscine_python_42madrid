@@ -9,4 +9,8 @@ def ft_count_harvest_recursive():
         init += 1
         recursive(days - 1, init)
     recursive(days, init)
+<<<<<<< HEAD
     print("Harvest time!")
+=======
+    print("Harvest time!")
+>>>>>>> 123bfe1 (project finished)
