@@ -1,9 +1,9 @@
 def ft_count_harvest_recursive():
-    days = int(input("Enter number of days: "))
+    days = int(input("Days unitil harvest: "))
     init = 1
 
     def recursive(days: int, init: int) -> None:
-        print(f"Day: {init}")
+        print(f"Day {init}")
         if days == 1:
             return
         init += 1
