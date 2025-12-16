@@ -1,4 +1,7 @@
-
+"""
+Garden analytics platform module.
+Provides statistics and management for multiple gardens.
+"""
 class GardenManager():
     number_gardens = 0
     gardens = []
@@ -80,10 +83,10 @@ class Garden():
         for plant in self.plants:
             if plant.prize_points > 0:
                 if plant.bloom == True:
-                    print(f"- {plant.name}: {plant.height}cm, {plant.color} flowers (blooming), Prize points: {plant.prize_points}")
+                    print(f"- {plant.name}: {plant.height}cm, {plant.color} flowers (blooming), Prize points: {plant.prize_points}\n")
                     prize += 1
                 else:
-                    print(f"- {plant.name}: {plant.height}cm, {plant.color} flowers, Prize points: {plant.prize_points}")
+                    print(f"- {plant.name}: {plant.height}cm, {plant.color} flowers, Prize points: {plant.prize_points}\n")
                     prize += 1
             elif plant.color != None:
                 if plant.bloom == True:
@@ -95,8 +98,8 @@ class Garden():
             else:
                 print(f"- {plant.name}: {plant.height}cm")
                 regular += 1
-        print(f"Plants added: {GardenManager.GardenStats.total_plant(self)}, Total growth: {GardenManager.GardenStats.total_grow(self)}")
-        print(f"Plant types: {regular} regular, {flowering} flowering, {prize} prize flowers")
+        print(f"Plants added: {GardenManager.GardenStats.total_plant(self)}, Total growth: {GardenManager.GardenStats.total_grow(self)}cm")
+        print(f"Plant types: {regular} regular, {flowering} flowering, {prize} prize flowers\n")
         print(f"Height validation test: {GardenManager.height_validation_test(self)}")
 
 class Plant():
@@ -125,7 +128,7 @@ class PrizeFlower(FloweringPlant):
         self.prize_points = points
         
 if __name__ == "__main__":
-    print("=== Garden Management System Demo ===")
+    print("=== Garden Management System Demo ===\n")
 
     # Crear jardines
     alice = Garden("Alice")
@@ -135,7 +138,6 @@ if __name__ == "__main__":
     oak = Plant("Oak Tree", 100)
     rose = FloweringPlant("Rose", 25, "red")
     sunflower = PrizeFlower("Sunflower", 50, "yellow", 10)
-
     # Hacer que florezcan las plantas con flores
     rose.to_bloom()
     sunflower.to_bloom()
@@ -144,17 +146,14 @@ if __name__ == "__main__":
     alice.add_plant(oak)
     alice.add_plant(rose)
     alice.add_plant(sunflower)
-
+    print()
     # Hacer crecer las plantas
     alice.grow_all_plants(1)
-
+    print()
     # Mostrar informe del jardín de Alice
     alice.garden_report()
-
     # Registrar jardines en el manager
     GardenManager.add_garden(alice)
     GardenManager.add_garden(bob)
-
     # Crear red de jardines (estadísticas globales)
     GardenManager.create_garden_network()
-

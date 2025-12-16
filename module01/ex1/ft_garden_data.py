@@ -1,3 +1,7 @@
+"""
+Garden data organizer module.
+Stores and displays information about multiple plants.
+"""
 class Plant:
     def __init__(self, name:str, height:int, age:int):
         self.name = name
@@ -5,7 +9,7 @@ class Plant:
         self.age = age
 plant1 = Plant("Rose", 25, 30)
 plant2 = Plant("Sunflower", 80, 45)
-plant3 = Plant("Cactus", 16, 120)
+plant3 = Plant("Cactus", 15, 120)
 print("=== Garden Plant Registry ===")
 print(f"{plant1.name}: {plant1.height}cm, {plant1.age} days old")
 print(f"{plant2.name}: {plant2.height}cm, {plant2.age} days old")

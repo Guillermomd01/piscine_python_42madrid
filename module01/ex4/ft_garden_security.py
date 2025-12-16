@@ -1,9 +1,15 @@
+
+"""
+Garden security system module.
+Protects plant data from invalid values.
+"""
+
 class SecurePlant:
     def __init__(self, name:str, height:int, days:int):
         self.name = name
+        print(f"Plant created: {self.name}")
         self.set_height = height
         self.set_age = days
-        print(f"Plant created: {self.name}")
         
     @property
     def get_height(self):
@@ -23,7 +29,7 @@ class SecurePlant:
     @get_age.setter
     def set_age(self, age: int):
         if (age < 0):
-            print(f"invalid operation attempted: age {age} days [REJECTED]")
+            print(f"Invalid operation attempted: age {age} days [REJECTED]")
             print("Security: Negative age rejected")
         else:
             self._age = age
@@ -31,9 +37,9 @@ class SecurePlant:
         
     def get_info(self):
         print(f"Current plant: {self.name} ({self._height}cm, {self._age} days)")    
-    
-rose = SecurePlant("rose", 32, 43)
-print(rose.get_age)
+print("=== Garden Security System ===")    
+rose = SecurePlant("Rose", 32, 43)
+print()
+rose.set_age = -5
+print()
 rose.get_info()
-#setter es ideal para validaciones
-#propperty es ideal para leer
