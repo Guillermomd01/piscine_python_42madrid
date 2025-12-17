@@ -2,11 +2,15 @@
 Garden data organizer module.
 Stores and displays information about multiple plants.
 """
+
+
 class Plant:
-    def __init__(self, name:str, height:int, age:int):
+    def __init__(self, name: str, height: int, age: int):
         self.name = name
         self.height = height
         self.age = age
+
+
 plant1 = Plant("Rose", 25, 30)
 plant2 = Plant("Sunflower", 80, 45)
 plant3 = Plant("Cactus", 15, 120)
