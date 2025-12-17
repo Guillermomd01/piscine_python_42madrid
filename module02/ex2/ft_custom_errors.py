@@ -1,15 +1,22 @@
 class GardenError(Exception):
     pass
+
+
 class PlantError(GardenError):
     pass
 
+
 class WaterError(GardenError):
-    pass 
+    pass
+
 
 def plant_error():
     raise PlantError("The tomato plant is wilting!")
+
+
 def water_error():
     raise WaterError("Not enough water in the tank!")
+
 
 def caught_error():
     print("=== Custom Garden Errors Demo ===\n")
@@ -33,5 +40,6 @@ def caught_error():
     except GardenError as e:
         print(f"Caught a garden error: {e}\n")
     print("All custom error types work correctly!")
-    
+
+
 caught_error()
