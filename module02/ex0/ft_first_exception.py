@@ -3,7 +3,7 @@ def check_temperature(temp_str: str) -> None:
     temperature = None
     try:
         temperature = int(temp_str)
-    except:
+    except ValueError:
         print(f"Error '{temp_str}' is not a valid number")
     if temperature is not None:
 
