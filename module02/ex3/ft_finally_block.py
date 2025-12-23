@@ -3,7 +3,7 @@ def water_plants(plant_list):
     try:
         for plant in plant_list:
             print("Watering " + plant)
-    except ValueError:
+    except TypeError:
         print("Error: Cannot water None - invalid plant!")
     finally:
         print("Closing watering system (cleanup)")
