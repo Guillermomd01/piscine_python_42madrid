@@ -10,7 +10,7 @@ else:
     try:
         for arg in sys.argv[1:]:
             numbers_list.append(int(arg))
-    except:
+    except ValueError:
         print(f"{arg} is not a number")
         error = True
     if not error:

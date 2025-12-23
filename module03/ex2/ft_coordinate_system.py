@@ -1,4 +1,3 @@
-# import sys
 import math
 
 origin_coords = (0, 0, 0)
