@@ -374,4 +374,15 @@ average_score = [
     score['total_score'] for score in data['players'].values()
     ]
 print(f"Average score: {(sum(average_score) / len(total_player)):.1f}")
-# me queda el top performer
+max_score = max(average_score)
+print(max_score)
+top_perfomer = {
+    player: i for player, i in data['players'].items()
+    if i['total_score'] == max_score}
+top_perfomer_name = max([name for name in top_perfomer.keys()])
+top_perfomer_stats = max([
+    stats['achievements_count'] for stats
+    in top_perfomer.values()])
+print(
+    f"Top performer: {top_perfomer_name} ({max_score} points, "
+    f"{top_perfomer_stats} achievements)")
