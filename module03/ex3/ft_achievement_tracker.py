@@ -9,9 +9,9 @@ print(f"Player bob achievements: {bob}")
 print(f"Player charlie achievements: {charlie}\n")
 
 print("=== Achievement Analytics ===")
-unique_achievemnts = alice.union(bob, charlie)
-print(f"All unique achievements: {unique_achievemnts}")
-print(f"Total unique achievements: {len(unique_achievemnts)}\n")
+unique_achievements = alice.union(bob, charlie)
+print(f"All unique achievements: {unique_achievements}")
+print(f"Total unique achievements: {len(unique_achievements)}\n")
 
 common_achievements = alice.intersection(bob, charlie)
 print(f"Common to all players: {common_achievements}")
