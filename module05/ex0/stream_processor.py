@@ -1,56 +1,81 @@
-from typing import List
+from typing import
 
 
 class DataProcessor():
-    def process(self):
-        pass
+    def __init__(self, data: str) -> None:
+        self.data = data
 
-    def validate(self):
-        pass
+    def process(self) -> None:
+        print("Generic message")
+        self.validate()
+        self.format_output()
 
-    def format_output(self):
-        pass
+    def validate(self) -> None:
+        print("Generic message")
+
+    def format_output(self) -> None:
+        print("Generic message")
 
 
 class NumericProcessor(DataProcessor):
-    def process(self, numbers: List) -> None:
-        print(f"Processing data: {numbers}")
+    def __init__(self, data):
+        super().__init__(data)
+        self.flag = True
+        self.proces_nbr = []
 
-    def validate(self, numbers: List) -> None:
+    def process(self) -> None:
+        print(f"Processing data: {self.data}")
+        self.validate()
+
+    def validate(self) -> None:
         try:
-            for n in numbers:
-                n = int(n)
+            for n in self.data:
+                self.proces_nbr.append(int(n))
+            print("Validation: Numeric data verified")
         except ValueError:
+            self.flag = False
             print("Error processing data")
-        print("Validation: Numeric data verified")
+        if self.flag:
+            self.format_output()
 
-    def format_output(self, numbers: List) -> None:
-        sum = 0
+    def format_output(self) -> None:
+        sume = 0
         count = 0
-        for n in numbers:
-            sum += n
+        for n in self.proces_nbr:
+            sume += n
             count += 1
-        avg = sum / count
-        print(f"Processed {count} numeric values, sum={sum}, avg={avg:.1f}")
+        avg = sume / count
+        print(f"Processed {count} numeric values, sum={sume}, avg={avg:.1f}")
 
 
 class TextProcessor(DataProcessor):
-    def process(self, phrase: str) -> None:
-        print(f"Processing data: {phrase}")
+    def __init__(self, data):
+        super().__init__(data)
+        self.words = 0
+        self.phrase = ""
 
-    def validate(self, phrase: str) -> None:
-        try:
-            "Hello" + phrase
-        except TypeError:
-            print("Cannot do that")
-        print("Validation: Text data verified")
+    def process(self) -> None:
+        print(f"Processing data: {self.data}")
+        if self.validate():
+            self.format_output()
 
-    def format_output(self, phrase: str) -> None:
+    def validate(self) -> bool:
+        if type(self.data) == str and self.data != "" and len(self.data.split()):
+            self.phrase = self.data.strip()
+            self.words = len(self.phrase.split(" "))
+            print("Validation: Text data verified")
+            return (True)
+        else:
+            print("Invalid text")
+            return (False)
+
+    def format_output(self) -> None:
         count = 0
-        for p in phrase:
+        for p in self.phrase:
             count += 1
-        number_words = len(phrase.split(" "))
-        print(f"Output: Processed text: {count} characters, {number_words} words")
+        print(
+            f"Output: Processed text: {count} characters, {self.words} words"
+            )
 
 
 class LogProcessor(DataProcessor):
