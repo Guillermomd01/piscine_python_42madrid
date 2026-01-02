@@ -1,42 +1,47 @@
-from typing import
+from abc import ABC, abstractmethod
+from typing import List
 
 
-class DataProcessor():
-    def __init__(self, data: str) -> None:
+class DataProcessor(ABC):
+    def __init__(self, data: str | None = None) -> None:
         self.data = data
 
+    @abstractmethod
     def process(self) -> None:
-        print("Generic message")
-        self.validate()
-        self.format_output()
+        pass
 
-    def validate(self) -> None:
-        print("Generic message")
+    @abstractmethod
+    def validate(self) -> bool:
+        pass
 
+    @abstractmethod
     def format_output(self) -> None:
-        print("Generic message")
+        pass
 
 
 class NumericProcessor(DataProcessor):
-    def __init__(self, data):
+    def __init__(self, data: List | None = None) -> None:
         super().__init__(data)
-        self.flag = True
-        self.proces_nbr = []
+        if self.data is None:
+            self.data: List = []
+        self.proces_nbr: List[int] = []
 
     def process(self) -> None:
+        print("Initializing Numeric Processor...")
         print(f"Processing data: {self.data}")
-        self.validate()
+        if self.validate():
+            self.format_output()
 
-    def validate(self) -> None:
+    def validate(self) -> bool:
         try:
+            self.proces_nbr = []
             for n in self.data:
                 self.proces_nbr.append(int(n))
             print("Validation: Numeric data verified")
+            return (True)
         except ValueError:
-            self.flag = False
             print("Error processing data")
-        if self.flag:
-            self.format_output()
+            return (False)
 
     def format_output(self) -> None:
         sume = 0
@@ -49,25 +54,26 @@ class NumericProcessor(DataProcessor):
 
 
 class TextProcessor(DataProcessor):
-    def __init__(self, data):
+    def __init__(self, data: str | None = None) -> None:
         super().__init__(data)
-        self.words = 0
-        self.phrase = ""
+        if self.data is None:
+            self.data: str = ""
+        self.words: int = 0
+        self.phrase: str = ""
 
     def process(self) -> None:
+        print("Initializing Text Processor...")
         print(f"Processing data: {self.data}")
         if self.validate():
             self.format_output()
 
     def validate(self) -> bool:
-        if type(self.data) == str and self.data != "" and len(self.data.split()):
+        if type(self.data) is str and self.data.strip():
             self.phrase = self.data.strip()
-            self.words = len(self.phrase.split(" "))
+            self.words = len(self.phrase.split())
             print("Validation: Text data verified")
-            return (True)
-        else:
-            print("Invalid text")
-            return (False)
+            return True
+        return False
 
     def format_output(self) -> None:
         count = 0
@@ -79,11 +85,72 @@ class TextProcessor(DataProcessor):
 
 
 class LogProcessor(DataProcessor):
-    def process(self):
-        print("Processing data: ")
+    def __init__(self, data: str | None = None) -> None:
+        super().__init__(data)
+        if self.data is None:
+            self.data: str = ""
+        self.normal: str = ""
+        self.level: str = ""
+        self.message: str = ""
 
-    def validate(self):
-        pass
+    def process(self) -> None:
+        print("Initializing Log Processor...")
+        print(f'Processing data: "{self.data}"')
+        if self.validate():
+            self.format_output()
 
-    def format_output(self):
-        pass
+    def validate(self) -> bool:
+        if type(self.data) is str:
+            self.normal = self.data.strip()
+            if self.normal.startswith(("ERROR:", "INFO:")):
+                self.normal_splited: List = self.normal.split(":", maxsplit=1)
+                self.level = self.normal_splited[0]
+                self.message = self.normal_splited[1].strip()
+                print("Validation: Log entry verified")
+                return (True)
+            else:
+                print("Cannot validate log")
+                return (False)
+        else:
+            print("Cannot validate log")
+            return (False)
+
+    def format_output(self) -> None:
+        if self.level == "ERROR":
+            print(
+                f"Output: [ALERT] {self.level} level detected: "
+                f"{self.message}")
+        else:
+            print(
+                f"[INFO] {self.level} level detected: "
+                f"{self.message}")
+
+
+if __name__ == "__main__":
+    print("=== CODE NEXUS - DATA PROCESSOR FOUNDATION ===\n")
+
+    processors = [
+        NumericProcessor([1, 2, 3, 4, 5]),
+        TextProcessor("Hello Nexus World"),
+        LogProcessor("ERROR: Connection timeout"),
+        LogProcessor("INFO: System ready"),
+    ]
+
+    for processor in processors:
+        processor.process()
+        print()
+    print("=== Polymorphic Processing Demo ===")
+    print("Processing multiple data types through same interface...")
+    demo_processors = [
+        NumericProcessor([1, 2, 3]),
+        TextProcessor("Hello World"),
+        LogProcessor("INFO: System ready"),
+    ]
+
+    index = 1
+    for processor in demo_processors:
+        print(f"Result {index}: ", end="")
+        processor.process()
+        index += 1
+
+    print("\nFoundation systems online. Nexus ready for advanced streams.")
