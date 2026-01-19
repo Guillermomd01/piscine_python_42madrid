@@ -30,7 +30,8 @@ class AlienContact(BaseModel):
             raise ValueError("Physical contact reports must be verified")
         telepathic = ContactType.telepathic
         if self.contact_type is telepathic and self.witness_count < 3:
-            raise ValueError("Telepathic contact requires at least 3 witnesses")
+            raise ValueError(
+                "Telepathic contact requires at least 3 witnesses")
         if not self.message_received and self.signal_strength > 7:
             raise ValueError("Strong signals should include received messages")
         return self
