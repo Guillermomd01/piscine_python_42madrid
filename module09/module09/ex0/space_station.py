@@ -12,16 +12,17 @@ class SpaceStation(BaseModel):
     is_operational: bool = Field(default=True)
     notes: str | None = None
 
+
 def main():
     print("Space Station Data Validation")
     print("========================================")
     station = SpaceStation(
         station_id="ISS001",
-        name= "International Space Station",
+        name="International Space Station",
         crew_size=6,
         power_level=85.5,
         oxigen_level=92.3,
-        last_maintenance=datetime(2024,5,20),
+        last_maintenance=datetime(2024, 5, 20),
         is_operational=True,
         notes="All correct")
     print("Valid station created:")
@@ -38,17 +39,18 @@ def main():
     try:
         fail_station = SpaceStation(
             station_id="ISS001",
-            name= "International Space Station",
+            name="International Space Station",
             crew_size=60,
             power_level=85.5,
             oxigen_level=92.3,
-            last_maintenance=datetime(2024,5,20),
+            last_maintenance=datetime(2024, 5, 20),
             is_operational=True,
             notes="All correct")
+        print(fail_station.station_id)
     except ValidationError as e:
         for error in e.errors():
             print(error['msg'])
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     main()
