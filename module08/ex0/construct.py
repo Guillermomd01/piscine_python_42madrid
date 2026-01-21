@@ -1,77 +1,55 @@
 import sys
+import site
+import os
 
 
-def check_dependencies():
+def verify_venv():
     """
-    Función de comparación que muestra las versiones de los paquetes
-    instalados. Es un requisito del manual para asegurar la integridad
-    de los programas cargados.
+    Analiza el entorno de ejecución para determinar si estamos dentro
+    del entorno virtual o todavía conectados a la 'Matrix' (entorno global).
     """
-    print("OPERATOR STATUS: Loading programs...\n")
-    print("Checking system dependencies:")
-    print("-" * 30)
+    try:
+        # En un entorno virtual, sys.prefix apunta a la carpeta del venv,
+        en_venv = sys.prefix != sys.base_prefix
 
-    dependencies = {
-        "pandas": "Data manipulation",
-        "numpy": "Numerical computing",
-        "matplotlib": "Visualization",
-        "requests": "Network access"
-    }
-    loaded_modules = {}
-    all_ok = True
+        # Obtenemos las rutas de instalación de paquetes
+        path_packages = site.getsitepackages([sys.prefix])
 
-    for lib, desc in dependencies.items():
-        try:
-            module = __import__(lib)
-            # Guardamos la versión detectada
-            version = getattr(module, "__version__", "Unknown")
-            print(f"[OK] {lib:<12} v{version:<10} - {desc} ready")
-            loaded_modules[lib] = module
-        except ImportError:
-            print(f"[ERROR] {lib:<11} NOT FOUND        - Cannot load {desc}")
-            all_ok = False
+        if en_venv:
+            print("MATRIX STATUS: Welcome to the construct\n")
+            print(f"Current Python: {sys.executable}")
+            print(f"Virtual Environment: {os.path.basename(sys.prefix)}")
+            print(f"Environment Path: {sys.prefix}\n")
 
-    print("-" * 30)
-    return all_ok, loaded_modules
+            print("SUCCESS: You're in an isolated environment!")
+            print(
+                "Safe to install packages without affecting "
+                "the global system.\n")
 
+            print("Package installation path (Isolated):")
+            print(f"-> {path_packages[0]}")
+        else:
+            print("MATRIX STATUS: You're still plugged in\n")
+            print(f"Current Python: {sys.executable}")
+            print("Virtual Environment: None detected\n")
 
-def run_analysis(modules):
-    """
-    Ejecuta el análisis de datos de la Matrix y genera la visualización.
-    """
-    pd = modules['pandas']
-    np = modules['numpy']
-    plt = modules['matplotlib'].pyplot
+            print("WARNING: You're in the global environment!")
+            print(
+                "The machines can see everything you install. "
+                "This risks corrupting")
+            print("the core architecture of your system.\n")
 
-    print("\nAnalyzing Matrix data streams...")
+            print("To enter the construct and isolate your data, run:")
+            print("-" * 40)
+            print("python -m venv matrix_env")
+            print("source matrix_env/bin/activate  # On Unix/macOS")
+            print("matrix_env\\Scripts\\activate     # On Windows")
+            print("-" * 40)
+            print("\nThen run this program again to verify your connection.")
 
-    # Generamos datos aleatorios
-    random_data = np.random.rand(1000, 3)
-    df = pd.DataFrame(random_data, columns=['Level', 'Agents', 'Glitches'])
-
-    print(f"Processing {len(df)} data points...")
-
-    # Configuración del gráfico
-    plt.figure(figsize=(10, 6))
-    df.plot(kind='line', alpha=0.7)
-    plt.title("Matrix Data Analysis - Real Time Stream", fontsize=14)
-    plt.grid(True, linestyle='--', alpha=0.6)
-
-    filename = 'matrix_analysis.png'
-    plt.savefig(filename)
-
-    print("\nAnalysis complete!")
-    print(f"Results encrypted and saved to: {filename}")
+    except Exception as e:
+        print(f"ERROR: A glitch in the Matrix occurred: {e}")
 
 
 if __name__ == "__main__":
-    success, modules = check_dependencies()
-
-    if success:
-        run_analysis(modules)
-    else:
-        print("\nOPERATOR ERROR: Critical programs missing.")
-        print(
-            "Please run 'pip install -r requirements.txt' "
-            "inside your construct.")
-        sys.exit(1)
+    verify_venv()
