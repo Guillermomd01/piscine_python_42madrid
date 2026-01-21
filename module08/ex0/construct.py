@@ -1,35 +1,77 @@
 import sys
-import site
 
 
-def verify_venv():
-    # sys.prefix is different of sys.base when exit venv
-    en_venv = sys.prefix != sys.base_prefix
-    if en_venv:
-        path_pakages = site.getsitepackages([sys.prefix])
-        print("MATRIX STATUS: Welcome to the construct\n")
-        print(f"Current Python: {sys.executable}")
-        print(f"Virtual Environment: {sys.prefix}")
-        print(f"Environment Path: {sys.prefix}\n")
-        print("SUCCESS: You're in an isolated environment!")
-        print("Safe to install packages without affecting")
-        print("the global system.\n")
-        print("Package installation path:")
-        print(path_pakages[0])
-    else:
-        print("MATRIX STATUS: You're still plugged in\n")
-        print(f"Current Python: {sys.executable}")
-        print("Virtual Environment: None detected\n")
-        print("WARNING: You're in the global environment!")
-        print("The machines can see everything you install.")
-        print("To enter the construct, run:")
-        print("python -m venv matrix_env")
-        print("source matrix_env/bin/activate\t# On Unix")
-        print("matrix_env")
-        print("Scripts")
-        print("activate\t# On Windows")
-        print("Then run this program again.")
+def check_dependencies():
+    """
+    Función de comparación que muestra las versiones de los paquetes
+    instalados. Es un requisito del manual para asegurar la integridad
+    de los programas cargados.
+    """
+    print("OPERATOR STATUS: Loading programs...\n")
+    print("Checking system dependencies:")
+    print("-" * 30)
+
+    dependencies = {
+        "pandas": "Data manipulation",
+        "numpy": "Numerical computing",
+        "matplotlib": "Visualization",
+        "requests": "Network access"
+    }
+    loaded_modules = {}
+    all_ok = True
+
+    for lib, desc in dependencies.items():
+        try:
+            module = __import__(lib)
+            # Guardamos la versión detectada
+            version = getattr(module, "__version__", "Unknown")
+            print(f"[OK] {lib:<12} v{version:<10} - {desc} ready")
+            loaded_modules[lib] = module
+        except ImportError:
+            print(f"[ERROR] {lib:<11} NOT FOUND        - Cannot load {desc}")
+            all_ok = False
+
+    print("-" * 30)
+    return all_ok, loaded_modules
+
+
+def run_analysis(modules):
+    """
+    Ejecuta el análisis de datos de la Matrix y genera la visualización.
+    """
+    pd = modules['pandas']
+    np = modules['numpy']
+    plt = modules['matplotlib'].pyplot
+
+    print("\nAnalyzing Matrix data streams...")
+
+    # Generamos datos aleatorios
+    random_data = np.random.rand(1000, 3)
+    df = pd.DataFrame(random_data, columns=['Level', 'Agents', 'Glitches'])
+
+    print(f"Processing {len(df)} data points...")
+
+    # Configuración del gráfico
+    plt.figure(figsize=(10, 6))
+    df.plot(kind='line', alpha=0.7)
+    plt.title("Matrix Data Analysis - Real Time Stream", fontsize=14)
+    plt.grid(True, linestyle='--', alpha=0.6)
+
+    filename = 'matrix_analysis.png'
+    plt.savefig(filename)
+
+    print("\nAnalysis complete!")
+    print(f"Results encrypted and saved to: {filename}")
 
 
 if __name__ == "__main__":
-    verify_venv()
+    success, modules = check_dependencies()
+
+    if success:
+        run_analysis(modules)
+    else:
+        print("\nOPERATOR ERROR: Critical programs missing.")
+        print(
+            "Please run 'pip install -r requirements.txt' "
+            "inside your construct.")
+        sys.exit(1)
