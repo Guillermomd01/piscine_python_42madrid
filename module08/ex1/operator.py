@@ -3,9 +3,10 @@ import sys
 
 def check_dependencies():
     """
-    Función de comparación que muestra las versiones de los
-    paquetes instalados. Es un requisito del manual para
-    asegurar la integridad de los programas cargados.
+    Comparison function that displays the versions
+    of the installed packages.It is a requirement of
+    the manual to ensure the integrity of the loaded
+    programs.
     """
     print("OPERATOR STATUS: Loading programs...\n")
     print("Checking system dependencies:")
@@ -23,8 +24,11 @@ def check_dependencies():
 
     for lib, desc in dependencies.items():
         try:
-            module = __import__(lib)
-            # Guardamos la versión detectada
+            if lib == "matplotlib":
+                module = __import__(lib, fromlist=['pyplot'])
+            else:
+                module = __import__(lib)
+            # We save the detected version.
             version = getattr(module, "__version__", "Unknown")
             print(f"[OK] {lib:<12} v{version:<10} - {desc} ready")
             loaded_modules[lib] = module
@@ -38,7 +42,7 @@ def check_dependencies():
 
 def run_analysis(modules):
     """
-    Ejecuta el análisis de datos de la Matrix y genera la visualización.
+    Run the analysis of the Matrix data and generate the visualization.
     """
     pd = modules['pandas']
     np = modules['numpy']
@@ -46,18 +50,17 @@ def run_analysis(modules):
 
     print("\nAnalyzing Matrix data streams...")
 
-    # Generamos datos aleatorios simulando tráfico de la Matrix
+    # We generate random data simulating Matrix traffic.
     random_data = np.random.rand(1000, 3)
     df = pd.DataFrame(random_data, columns=['Level', 'Agents', 'Glitches'])
 
     print(f"Processing {len(df)} data points...")
 
-    # Configuración del gráfico
+    # Graph configuration.
     plt.figure(figsize=(10, 6))
-    df.plot(kind='line', alpha=0.7)
+    df.head(50).plot(kind='bar', alpha=0.7)
     plt.title("Matrix Data Analysis - Real Time Stream", fontsize=14)
     plt.grid(True, linestyle='--', alpha=0.6)
-
     filename = 'matrix_analysis.png'
     plt.savefig(filename)
 

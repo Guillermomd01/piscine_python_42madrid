@@ -3,7 +3,10 @@ from dotenv import load_dotenv
 
 
 def load_oracle_config():
-    load_dotenv()
+    """
+    Load data from .env.example
+    """
+    load_dotenv(dotenv_path='.env.example')
     print("ORACLE STATUS: Reading the Matrix...\n")
     mode = os.getenv('MATRIX_MODE', None)
     db = os.getenv('DATABASE_URL', None)
@@ -20,7 +23,7 @@ def load_oracle_config():
     print()
     print("Environment security check:")
     print("[OK] No hardcoded secrets detected")
-    if os.path.exists('.env'):
+    if os.path.exists('.env.example'):
         print("[OK] .env file properly configured")
     else:
         print("[WARNING] .env file missing! Using system defaults.")

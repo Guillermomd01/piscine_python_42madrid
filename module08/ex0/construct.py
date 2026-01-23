@@ -5,14 +5,15 @@ import os
 
 def verify_venv():
     """
-    Analiza el entorno de ejecución para determinar si estamos dentro
-    del entorno virtual o todavía conectados a la 'Matrix' (entorno global).
+    Analyze the execution environment to determine whether
+    we are inside the virtual environment or still connected
+    to the “Matrix” (global environment).
     """
     try:
-        # En un entorno virtual, sys.prefix apunta a la carpeta del venv,
+        # In a virtual environment, sys.prefix points to the venv directory,
         en_venv = sys.prefix != sys.base_prefix
 
-        # Obtenemos las rutas de instalación de paquetes
+        # We obtain the package installation paths.
         path_packages = site.getsitepackages([sys.prefix])
 
         if en_venv:
