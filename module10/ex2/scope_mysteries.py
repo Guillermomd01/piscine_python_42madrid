@@ -1,4 +1,9 @@
 def mage_counter() -> callable:
+    """Initializes a persistent counter using a closure to track mage IDs.
+
+    Returns:
+        A function that increments and returns the current count on each call.
+    """
     count = 0
 
     def m_counter():
@@ -25,6 +30,12 @@ def enchantment_factory(enchantment_type: str) -> callable:
 
 
 def memory_vault() -> dict[str, callable]:
+    """Creates a private data sanctuary for storing and
+    recalling magic secrets.
+
+    Returns:
+        A dictionary containing 'store' and 'recall' interface functions.
+    """
     memory = {}
 
     def store(**kwargs):
