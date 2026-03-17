@@ -1,7 +1,13 @@
-from pydantic import BaseModel, model_validator, Field
 from enum import Enum
 from datetime import datetime
 from typing import List
+
+try:
+    from pydantic import BaseModel, model_validator, Field
+except ModuleNotFoundError:
+    print("Error: la librería 'pydantic' no está instalada.")
+    print("Instálala con: pip install pydantic")
+    exit(1)
 
 
 class Rank(str, Enum):
@@ -28,7 +34,7 @@ class SpaceMission(BaseModel):
     destination: str = Field(min_length=3, max_length=50)
     launch_date: datetime = Field(le=datetime.today())
     duration_days: int = Field(ge=1, le=3650)
-    crew: List[CrewMember] = Field(ge=1, le=12)
+    crew: List[CrewMember] = Field(min_length=1, max_length=12)
     mission_status: str = Field(default="planned")
     budget_millions: float = Field(ge=1, le=10000)
 
@@ -55,3 +61,99 @@ class SpaceMission(BaseModel):
             if members.is_active is False:
                 raise ValueError("All crew members must be active")
         return self
+
+
+def main():
+    print("Space Mission Crew Validation")
+    print("=========================================")
+
+    try:
+        crew = [
+            CrewMember(
+                member_id="C001",
+                name="Sarah Connor",
+                rank=Rank.commander,
+                age=42,
+                specialization="Mission Command",
+                years_experience=15,
+                is_active=True
+            ),
+            CrewMember(
+                member_id="C002",
+                name="John Smith",
+                rank=Rank.lieutenant,
+                age=35,
+                specialization="Navigation",
+                years_experience=6,
+                is_active=True
+            ),
+            CrewMember(
+                member_id="C003",
+                name="Alice Johnson",
+                rank=Rank.officer,
+                age=30,
+                specialization="Engineering",
+                years_experience=5,
+                is_active=True
+            ),
+        ]
+
+        mission = SpaceMission(
+            mission_id="M2024_MARS",
+            mission_name="Mars Colony Establishment",
+            destination="Mars",
+            launch_date=datetime(2024, 6, 1),
+            duration_days=900,
+            crew=crew,
+            budget_millions=2500.0
+        )
+
+        print("Valid mission created:")
+        print(f"Mission: {mission.mission_name}")
+        print(f"ID: {mission.mission_id}")
+        print(f"Destination: {mission.destination}")
+        print(f"Duration: {mission.duration_days} days")
+        print(f"Budget: ${mission.budget_millions}M")
+        print(f"Crew size: {len(mission.crew)}")
+        print("Crew members:")
+        for member in mission.crew:
+            print(
+                f"- {member.name} "
+                f"({member.rank.value}) - {member.specialization}")
+
+    except ValueError as e:
+        print("Unexpected error:", e)
+
+    print("=========================================")
+    print("Expected validation error:")
+
+    try:
+        crew_fail = [
+            CrewMember(
+                member_id="C010",
+                name="Tom Hardy",
+                rank=Rank.officer,
+                age=38,
+                specialization="Engineering",
+                years_experience=10,
+                is_active=True
+            )
+        ]
+
+        fail_mission = SpaceMission(
+            mission_id="M_FAIL",
+            mission_name="Test Mission",
+            destination="Moon",
+            launch_date=datetime(2024, 6, 1),
+            duration_days=30,
+            crew=crew_fail,
+            budget_millions=500.0
+        )
+        print(fail_mission)
+
+    except ValueError as e:
+        print(e)
+
+
+if __name__ == "__main__":
+    main()
